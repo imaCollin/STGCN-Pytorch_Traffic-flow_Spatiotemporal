@@ -1,10 +1,10 @@
 import math
 import torch
-import torch.nn as nn
+import torch.nn as Nn
 import torch.nn.functional as Func
 
 
-class TimeBlock(nn.Module):
+class TimeBlock(Nn.Module):
     """
     Neural network block that applies a temporal convolution to each node of
     a graph in isolation.
@@ -19,9 +19,9 @@ class TimeBlock(nn.Module):
         :param kernel_size: Size of the 1D temporal kernel.
         """
         super(TimeBlock, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels, out_channels, (1, kernel_size))
-        self.conv2 = nn.Conv2d(in_channels, out_channels, (1, kernel_size))
-        self.conv3 = nn.Conv2d(in_channels, out_channels, (1, kernel_size))
+        self.conv1 = Nn.Conv2d(in_channels, out_channels, (1, kernel_size))
+        self.conv2 = Nn.Conv2d(in_channels, out_channels, (1, kernel_size))
+        self.conv3 = Nn.Conv2d(in_channels, out_channels, (1, kernel_size))
 
     def forward(self, X):
         """
@@ -39,7 +39,7 @@ class TimeBlock(nn.Module):
         return out
 
 
-class STGCNBlock(nn.Module):
+class STGCNBlock(Nn.Module):
     """
     Neural network block that applies a temporal convolution on each node in
     isolation, followed by a graph convolution, followed by another temporal
@@ -60,11 +60,11 @@ class STGCNBlock(nn.Module):
         super(STGCNBlock, self).__init__()
         self.temporal1 = TimeBlock(in_channels=in_channels,
                                    out_channels=out_channels)
-        self.Theta1 = nn.Parameter(torch.FloatTensor(out_channels,
+        self.Theta1 = Nn.Parameter(torch.FloatTensor(out_channels,
                                                      spatial_channels))
         self.temporal2 = TimeBlock(in_channels=spatial_channels,
                                    out_channels=out_channels)
-        self.batch_norm = nn.BatchNorm2d(num_nodes)
+        self.batch_norm = Nn.BatchNorm2d(num_nodes)
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -88,7 +88,7 @@ class STGCNBlock(nn.Module):
         # return t3
 
 
-class STGCN(nn.Module):
+class STGCN(Nn.Module):
     """
     Spatio-temporal graph convolutional network as described in
     https://arxiv.org/abs/1709.04875v3 by Yu et al.
@@ -112,7 +112,7 @@ class STGCN(nn.Module):
         self.block2 = STGCNBlock(in_channels=64, out_channels=64,
                                  spatial_channels=16, num_nodes=num_nodes)
         self.last_temporal = TimeBlock(in_channels=64, out_channels=64)
-        self.fully = nn.Linear((num_timesteps_input - 2 * 5) * 64,
+        self.fully = Nn.Linear((num_timesteps_input - 2 * 5) * 64,
                                num_timesteps_output)
 
     def forward(self, A_hat, X):
