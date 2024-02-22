@@ -1,7 +1,7 @@
 import math
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as Func
 
 
 class TimeBlock(nn.Module):
@@ -33,7 +33,7 @@ class TimeBlock(nn.Module):
         # Convert into NCHW format for pytorch to perform convolutions.
         X = X.permute(0, 3, 1, 2)
         temp = self.conv1(X) + torch.sigmoid(self.conv2(X))
-        out = F.relu(temp + self.conv3(X))
+        out = Func.relu(temp + self.conv3(X))
         # Convert back from NCHW to NHWC
         out = out.permute(0, 2, 3, 1)
         return out
@@ -81,8 +81,8 @@ class STGCNBlock(nn.Module):
         """
         t = self.temporal1(X)
         lfs = torch.einsum("ij,jklm->kilm", [A_hat, t.permute(1, 0, 2, 3)])
-        # t2 = F.relu(torch.einsum("ijkl,lp->ijkp", [lfs, self.Theta1]))
-        t2 = F.relu(torch.matmul(lfs, self.Theta1))
+        # t2 = Func.relu(torch.einsum("ijkl,lp->ijkp", [lfs, self.Theta1]))
+        t2 = Func.relu(torch.matmul(lfs, self.Theta1))
         t3 = self.temporal2(t2)
         return self.batch_norm(t3)
         # return t3
