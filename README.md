@@ -1,4 +1,4 @@
-# STGNN-Pytorch_Traffic-flow_Spatiotemporal
+# STGCN-Pytorch_Traffic-flow_Spatiotemporal
 ## Characteristics:
 The proposed model represents a pioneering approach in traffic research by employing pure convolutional layers (TCN) to simultaneously extract spatial-temporal information from time series of graph structures. It introduces a novel neural network architecture comprising spatio-temporal blocks. Due to the exclusive use of convolution operations, this architecture exhibits training speeds over 10 times faster than RNN-based models and requires fewer parameters. Moreover, it enables more efficient handling of larger road networks. Experimental results validate the effectiveness of the proposed network on two real traffic datasets.
 ## Network Skeleton:
