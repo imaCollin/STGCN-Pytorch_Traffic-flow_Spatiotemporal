@@ -3,7 +3,6 @@ import zipfile
 import numpy as np
 import torch
 
-
 def load_metr_la_data():
     if (not os.path.isfile("data/adj_mat.npy")
             or not os.path.isfile("data/node_values.npy")):
@@ -22,7 +21,6 @@ def load_metr_la_data():
 
     return A, X, means, stds
 
-
 def get_normalized_adj(A):
     """
     Returns the degree normalized adjacency matrix.
@@ -34,7 +32,6 @@ def get_normalized_adj(A):
     A_wave = np.multiply(np.multiply(diag.reshape((-1, 1)), A),
                          diag.reshape((1, -1)))
     return A_wave
-
 
 def generate_dataset(X, num_timesteps_input, num_timesteps_output):
     """
