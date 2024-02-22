@@ -1,6 +1,6 @@
 import os
 import zipfile
-import numpy as np
+import numpy as Np
 import torch
 
 def load_metr_la_data():
@@ -9,14 +9,14 @@ def load_metr_la_data():
         with zipfile.ZipFile("data/METR-LA.zip", 'r') as zip_ref:
             zip_ref.extractall("data/")
 
-    A = np.load("data/adj_mat.npy")
-    X = np.load("data/node_values.npy").transpose((1, 2, 0))
-    X = X.astype(np.float32)
+    A = Np.load("data/adj_mat.npy")
+    X = Np.load("data/node_values.npy").transpose((1, 2, 0))
+    X = X.astype(Np.float32)
 
     # Normalization using Z-score method
-    means = np.mean(X, axis=(0, 2))
+    means = Np.mean(X, axis=(0, 2))
     X = X - means.reshape(1, -1, 1)
-    stds = np.std(X, axis=(0, 2))
+    stds = Np.std(X, axis=(0, 2))
     X = X / stds.reshape(1, -1, 1)
 
     return A, X, means, stds
@@ -25,11 +25,11 @@ def get_normalized_adj(A):
     """
     Returns the degree normalized adjacency matrix.
     """
-    A = A + np.diag(np.ones(A.shape[0], dtype=np.float32))
-    D = np.array(np.sum(A, axis=1)).reshape((-1,))
+    A = A + Np.diag(Np.ones(A.shape[0], dtype=Np.float32))
+    D = Np.array(Np.sum(A, axis=1)).reshape((-1,))
     D[D <= 10e-5] = 10e-5    # Prevent infs
-    diag = np.reciprocal(np.sqrt(D))
-    A_wave = np.multiply(np.multiply(diag.reshape((-1, 1)), A),
+    diag = Np.reciprocal(Np.sqrt(D))
+    A_wave = Np.multiply(Np.multiply(diag.reshape((-1, 1)), A),
                          diag.reshape((1, -1)))
     return A_wave
 
@@ -60,5 +60,5 @@ def generate_dataset(X, num_timesteps_input, num_timesteps_output):
                 (0, 2, 1)))
         target.append(X[:, 0, i + num_timesteps_input: j])
 
-    return torch.from_numpy(np.array(features)), \
-           torch.from_numpy(np.array(target))
+    return torch.from_numpy(Np.array(features)), \
+           torch.from_numpy(Np.array(target))
